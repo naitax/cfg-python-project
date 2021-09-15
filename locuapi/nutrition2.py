@@ -31,17 +31,20 @@ def calculate_calories():
         elif level_of_activity == 5:
             activity = 1.9
 
-        BMR_women = 655.1 + (9.563 * weight) + (1.850 * height) - (4.676 * age)
-        ARM_women = int(BMR_women * activity)
-        BMR_men = 66.47 + (13.75 * weight) + (5.003 * height) - (6.755 * age)
-        ARM_men = int(BMR_men * activity)
-        if gender == 'F':
-            print('**To maintain your weight you should eat {} kcal**'.format(ARM_women))
-        elif gender == 'M':
-            print('**To maintain your weight you should eat {} kcal**'.format(ARM_men))
+        BMR = calculate_BMR(gender, weight, height, age)
+        ARM = int(BMR * activity)
+        print('\n')
+        print('**To maintain your weight you should eat {} kcal**'.format(ARM))
 
     print('-------------------------')
-    print('Search for a recipe! ')
+    print('SEARCH FOR A RECIPE! ')
+
+def calculate_BMR(g, w, h, a):
+    if g == 'F':
+        return 655.1 + (9.563 * w) + (1.850 * h) - (4.676 * a)
+    elif g == 'M':
+        return 66.47 + (13.75 * w) + (5.003 * h) - (6.755 * a)
+
 
 def recipe_search(ingredient):
     app_id = '552ff3b8'
