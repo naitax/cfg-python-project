@@ -40,9 +40,9 @@ def calculate_calories():
     print('SEARCH FOR A RECIPE! ')
 
 def calculate_BMR(g, w, h, a):
-    if g == 'F':
+    if g == 'F' or g == 'f':
         return 655.1 + (9.563 * w) + (1.850 * h) - (4.676 * a)
-    elif g == 'M':
+    elif g == 'M' or g == 'm':
         return 66.47 + (13.75 * w) + (5.003 * h) - (6.755 * a)
 
 
@@ -62,6 +62,7 @@ def run():
     min_of_calories = int(input('Enter the MIN range of calories: '))
     max_of_calories = int(input('Enter the MAX range of calories: '))
     results = find_recipe()
+    is_found = True
 
     for result in results:
         recipe = result['recipe']
@@ -71,25 +72,29 @@ def run():
 
         if calories<max_of_calories and calories>min_of_calories:
             print(recipe['label'])
-            print(recipe['uri'])
+            print(recipe['url'])
             print(recipe['image'])
             print('Diet Label: {}'. format(recipe['dietLabels']))
             print('Cuisine Type: {}'.format(recipe['cuisineType']))
             print('{} kcal'.format(calories))
             print()
-            print_image = input('Do you want to display image? (yes/no)')
-            if print_image == 'yes':
-                response = requests.get(image)
-                img = Image.open(BytesIO(response.content))
-                img.show()
+            response = requests.get(image)
+            img = Image.open(BytesIO(response.content))
+            img.show()
+            is_found = True
+        else:
+            is_found = False
 
 
-    save_recipes = input('Do you want to save these recipes into a file?(yes/no) ')
-    if save_recipes == 'yes':
-        with open("recipetext.txt", "w") as recipe_file:
-            recipe_file.write(str(recipe))
-            recipe_file.close()
-            print('File saved successfully!')
+    if is_found:
+        save_recipes = input('Do you want to save these recipes into a file?(yes/no) ')
+        if save_recipes == 'yes':
+            with open("recipetext.txt", "w") as recipe_file:
+                recipe_file.write(str(recipe))
+                recipe_file.close()
+                print('File saved successfully!')
+    else:
+        print('No results found! Please try again!')
 
 
 welcome_screen()
