@@ -2,9 +2,11 @@ import requests
 from PIL import Image
 from io import BytesIO
 
+
 def welcome_screen():
     print('WELCOME IN RECIPE SEARCH!')
     print('-------------------------')
+
 
 def calculate_calories():
     answer = input('Do you want to know how many calories you should eat(yes/no)? ')
@@ -14,12 +16,12 @@ def calculate_calories():
         age = int(input('Please enter your age: '))
         gender = input('Please enter your gender (F/M): ')
         level_of_activity = int(input('How active are you? \n'
-                                  ' 1. Sedentary (little or no exercise)\n'
-                                  ' 2. Lightly active (exercise 1–3 days/week)\n'
-                                  ' 3. Moderately active (exercise 3–5 days/week) \n'
-                                  ' 4. Active (exercise 6–7 days/week)\n'
-                                  ' 5. Very active (hard exercise 6–7 days/week)\n'
-                                  '     Please choose a number(1-5): '))
+                                      ' 1. Sedentary (little or no exercise)\n'
+                                      ' 2. Lightly active (exercise 1–3 days/week)\n'
+                                      ' 3. Moderately active (exercise 3–5 days/week) \n'
+                                      ' 4. Active (exercise 6–7 days/week)\n'
+                                      ' 5. Very active (hard exercise 6–7 days/week)\n'
+                                      '     Please choose a number(1-5): '))
         if level_of_activity == 1:
             activity = 1.2
         elif level_of_activity == 2:
@@ -39,6 +41,7 @@ def calculate_calories():
     print('-------------------------')
     print('SEARCH FOR A RECIPE! ')
 
+
 def calculate_BMR(g, w, h, a):
     if g == 'F' or g == 'f':
         return 655.1 + (9.563 * w) + (1.850 * h) - (4.676 * a)
@@ -54,47 +57,40 @@ def recipe_search(ingredient):
     data = result.json()
     return data['hits']
 
+
 def find_recipe():
     return recipe_search(ingredient)
 
-def run():
 
+def run():
     min_of_calories = int(input('Enter the MIN range of calories: '))
     max_of_calories = int(input('Enter the MAX range of calories: '))
     results = find_recipe()
-    is_found = True
+
 
     for result in results:
         recipe = result['recipe']
         calories = int(recipe['calories'])
         image = recipe['image']
 
-
-        if calories<max_of_calories and calories>min_of_calories:
+        if calories < max_of_calories and calories > min_of_calories:
             print(recipe['label'])
             print(recipe['url'])
             print(recipe['image'])
-            print('Diet Label: {}'. format(recipe['dietLabels']))
+            print('Diet Label: {}'.format(recipe['dietLabels']))
             print('Cuisine Type: {}'.format(recipe['cuisineType']))
             print('{} kcal'.format(calories))
             print()
             response = requests.get(image)
             img = Image.open(BytesIO(response.content))
             img.show()
-            is_found = True
-        else:
-            is_found = False
 
-
-    if is_found:
-        save_recipes = input('Do you want to save these recipes into a file?(yes/no) ')
-        if save_recipes == 'yes':
-            with open("recipetext.txt", "w") as recipe_file:
-                recipe_file.write(str(recipe))
-                recipe_file.close()
-                print('File saved successfully!')
-    else:
-        print('No results found! Please try again!')
+    save_recipes = input('Do you want to save these recipes into a file?(yes/no) ')
+    if save_recipes == 'yes':
+        with open("recipetext.txt", "w") as recipe_file:
+            recipe_file.write(str(recipe))
+            recipe_file.close()
+            print('File saved successfully!')
 
 
 welcome_screen()
@@ -102,4 +98,3 @@ calculate_calories()
 ingredient = input('Enter an ingredient: ')
 find_recipe()
 run()
-
