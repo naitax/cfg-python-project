@@ -66,7 +66,7 @@ def run():
     min_of_calories = int(input('Enter the MIN range of calories: '))
     max_of_calories = int(input('Enter the MAX range of calories: '))
     results = find_recipe()
-
+    counter = 0
 
     for result in results:
         recipe = result['recipe']
@@ -74,6 +74,7 @@ def run():
         image = recipe['image']
 
         if calories < max_of_calories and calories > min_of_calories:
+            counter = counter + 1
             print(recipe['label'])
             print(recipe['url'])
             print(recipe['image'])
@@ -84,14 +85,15 @@ def run():
             response = requests.get(image)
             img = Image.open(BytesIO(response.content))
             img.show()
-
-    save_recipes = input('Do you want to save these recipes into a file?(yes/no) ')
-    if save_recipes == 'yes':
-        with open("recipetext.txt", "w") as recipe_file:
-            recipe_file.write(str(recipe))
-            recipe_file.close()
-            print('File saved successfully!')
-
+    if counter > 0:
+        save_recipes = input('Do you want to save these recipes into a file?(yes/no) ')
+        if save_recipes == 'yes':
+            with open("recipetext.txt", "w") as recipe_file:
+                recipe_file.write(str(recipe))
+                recipe_file.close()
+                print('File saved successfully!')
+    else:
+        print("no results found!")
 
 welcome_screen()
 calculate_calories()
