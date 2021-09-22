@@ -93,7 +93,7 @@ def run():
                 recipe_file.close()
                 print('File saved successfully!')
     else:
-        print("no results found!")
+        print("No Results Found! Please try again!")
 
 welcome_screen()
 calculate_calories()
